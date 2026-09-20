@@ -16,7 +16,17 @@
     <!-- 右侧：账号密码登录 -->
     <div class="login-form">
       <h2 class="login-form__title">登录</h2>
+
+      <!-- 二维码登录：仅切换当前面板的展示形态，账号密码表单字段保持不变 -->
+      <div v-if="qrcodeVisible" class="login-qrcode">
+        <div class="login-qrcode__box">
+          <Icon icon="ep:grid" class="login-qrcode__icon" />
+        </div>
+        <p class="login-qrcode__tip">请使用手机扫码登录</p>
+      </div>
+
       <el-form
+        v-else
         ref="loginFormRef"
         :model="loginFormData"
         :rules="loginFormRules"
@@ -52,6 +62,24 @@
           </el-button>
         </el-form-item>
       </el-form>
+
+      <!-- 底部辅助登录入口：手机登录 / 二维码登录切换 / 注册入口。
+           图标与链接统一取黄色主题变量，仅调整配色，不改动跳转逻辑与表单字段 -->
+      <div class="login-aux">
+        <el-button class="login-aux__mobile" @click="handleMobileLogin">
+          <Icon icon="ep:cellphone" class="login-aux__mobile-icon" />
+          <span>手机登录</span>
+        </el-button>
+
+        <p class="login-aux__links">
+          <el-button link class="login-aux__link" @click="handleQrcodeSwitch">
+            <Icon :icon="qrcodeVisible ? 'ep:user' : 'ep:grid'" class="login-aux__link-icon" />
+            <span>{{ qrcodeVisible ? '账号登录' : '二维码登录' }}</span>
+          </el-button>
+          <span class="login-aux__divider">|</span>
+          <el-button link class="login-aux__link" @click="handleRegister">注册账号</el-button>
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -99,6 +127,24 @@ const loginFormRules = reactive({
     { min: 4, max: 16, message: '密码长度为 4-16 位', trigger: 'blur' }
   ]
 })
+
+/** 二维码面板与账号密码表单的互斥展示状态，不涉及任何表单字段变更 */
+const qrcodeVisible = ref(false)
+
+/** 二维码登录 / 账号登录 切换 */
+const handleQrcodeSwitch = () => {
+  qrcodeVisible.value = !qrcodeVisible.value
+}
+
+/** 手机登录入口：不改动登录表单字段，跳转由路由层接入 */
+const handleMobileLogin = () => {
+  message.info('手机登录入口')
+}
+
+/** 注册入口：跳转由路由层接入 */
+const handleRegister = () => {
+  message.info('注册入口')
+}
 
 /** 登录 */
 const handleLogin = async () => {
@@ -228,6 +274,89 @@ const handleLogin = async () => {
     --el-button-active-text-color: var(--login-text-color);
     --el-button-active-bg-color: var(--login-brand-color);
     --el-button-active-border-color: var(--login-brand-color);
+  }
+
+  // 聚焦态对齐黄色主题：Element Plus 用 --el-color-primary 绘制输入框聚焦边框，
+  // 在登录页作用域内换成主题深金，避免聚焦边框在白底上不可辨识
+  :deep(.el-input__wrapper.is-focus) {
+    box-shadow: 0 0 0 1px var(--login-link-color) inset;
+  }
+}
+
+// ---------- 底部辅助登录入口：手机登录 / 二维码登录切换 / 注册入口 ----------
+// 图标与链接统一取 --login-link-color，悬停与聚焦取 --login-link-color-hover。
+// 第三方登录图标保留各自品牌原色，不纳入本组配色规则。
+.login-aux {
+  margin-top: 24px;
+  text-align: center;
+
+  // 手机登录按钮与主登录按钮共用同一套品牌色填充，避免两处配色漂移
+  &__mobile {
+    width: 100%;
+    --el-button-text-color: var(--login-text-color);
+    --el-button-bg-color: var(--login-brand-color);
+    --el-button-border-color: var(--login-brand-color);
+    --el-button-hover-text-color: var(--login-text-color);
+    --el-button-hover-bg-color: var(--login-brand-color);
+    --el-button-hover-border-color: var(--login-brand-color);
+    --el-button-active-text-color: var(--login-text-color);
+    --el-button-active-bg-color: var(--login-brand-color);
+    --el-button-active-border-color: var(--login-brand-color);
+  }
+
+  &__mobile-icon {
+    margin-right: 6px;
+    color: inherit;
+  }
+
+  &__links {
+    margin: 16px 0 0;
+    font-size: 14px;
+  }
+
+  // el-button link 的文字色由 CSS 变量驱动，此处直接覆盖变量而非 color，
+  // 以保证悬停 / 按下态同样命中主题色
+  &__link {
+    --el-button-text-color: var(--login-link-color);
+    --el-button-hover-text-color: var(--login-link-color-hover);
+    --el-button-active-text-color: var(--login-link-color-hover);
+  }
+
+  &__link-icon {
+    margin-right: 4px;
+    color: inherit;
+  }
+
+  &__divider {
+    margin: 0 8px;
+    color: var(--login-link-color);
+  }
+}
+
+// ---------- 二维码登录面板 ----------
+.login-qrcode {
+  padding: 8px 0 0;
+  text-align: center;
+
+  &__box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    height: 180px;
+    color: var(--login-link-color);
+    border: 1px solid var(--login-brand-color);
+    border-radius: 8px;
+  }
+
+  &__icon {
+    font-size: 48px;
+  }
+
+  &__tip {
+    margin: 12px 0 0;
+    font-size: 14px;
+    color: var(--login-link-color);
   }
 }
 

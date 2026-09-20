@@ -22,6 +22,15 @@ $login-text-color: #1f1f1f !default;
 // 黄底次级文字色：#5C4A00 与 #FFD100 的对比度约为 5.9:1，同样满足 WCAG AA
 $login-text-sub-color: #5c4a00 !default;
 
+// 底部辅助入口（手机登录 / 二维码登录切换 / 注册入口）的链接与图标色。
+// 纯品牌黄 #FFD100 落在浅色表单面板（--el-bg-color #FFF）上的对比度仅约 1.3:1，
+// 直接当文字色不可读；因此在同一黄色相内压暗为深金 #7A5C00（对白底 ≈ 6.2:1，
+// 满足 WCAG AA），既保留「黄色主题」的观感又不牺牲可读性。
+$login-link-color: #7a5c00 !default;
+
+// 悬停 / 聚焦态：再压暗一档，复用次级文字色，保证状态变化可辨识
+$login-link-color-hover: $login-text-sub-color !default;
+
 // ---------- 主题变量对外暴露 ----------
 // CSS 自定义属性统一挂在登录页根节点 .login-container 下：自定义属性会沿 DOM
 // 继承，登录页内任意层级都能读取；作用域限定在登录页，不写顶层 :root，
@@ -31,6 +40,8 @@ $login-text-sub-color: #5c4a00 !default;
   --login-brand-color: #{$login-brand-color};
   --login-text-color: #{$login-text-color};
   --login-text-sub-color: #{$login-text-sub-color};
+  --login-link-color: #{$login-link-color};
+  --login-link-color-hover: #{$login-link-color-hover};
 }
 
 // ---------- 登录页品牌黄 · 深色模式降级 ----------
@@ -54,6 +65,13 @@ $login-text-color-dark: #f2ecd8 !default;
 // 深色模式次级文字色（低饱和暖黄白，比正文低一档）
 $login-text-sub-color-dark: #cfc08e !default;
 
+// 深色模式辅助入口链接色：暗色表单面板（--el-bg-color #141414）下不再需要压暗，
+// 直接用品牌黄即可（对比度 ≈ 12.8:1），从而在深色下也明确读作「黄色主题」
+$login-link-color-dark: #ffd100 !default;
+
+// 深色模式悬停 / 聚焦态：提亮一档（对比度 ≈ 14.4:1）
+$login-link-color-hover-dark: #ffe14d !default;
+
 // 通过 html.dark 覆盖变量：Element Plus 深色模式会把 dark 类挂在 html 上，
 // 该选择器权重高于上面的 .login-container，因此无需 !important。
 // 对比度实测（WCAG AA 要求 ≥ 4.5:1，全部达标且留有余量）：
@@ -67,4 +85,6 @@ html.dark .login-container {
   --login-brand-color: #{$login-brand-color-dark};
   --login-text-color: #{$login-text-color-dark};
   --login-text-sub-color: #{$login-text-sub-color-dark};
+  --login-link-color: #{$login-link-color-dark};
+  --login-link-color-hover: #{$login-link-color-hover-dark};
 }
