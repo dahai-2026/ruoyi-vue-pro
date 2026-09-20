@@ -1,0 +1,12 @@
+// ============================================
+// 全局 SCSS 变量
+// ============================================
+
+// ---------- 登录页红色主题 ----------
+// 登录页使用独立的红色主题，仅在 .login-container 作用域内覆盖 Element Plus 变量，
+// 不定义顶层 :root，避免污染全局主题色。
+// 三档色阶：主色 / hover（更亮）/ active（更深）
+// 使用 !default 便于外部在引入前按需覆盖这三档颜色。
+$login-primary-color: #e60012 !default; // 主色（默认 #E60012）
+$login-primary-hover: #ff4d4f !default; // hover：比主色更亮
+$login-primary-active: #b3000e !default; // active：比主色更深
