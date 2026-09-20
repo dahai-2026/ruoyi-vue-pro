@@ -58,6 +58,7 @@
 
 <script setup lang="ts">
 import request from '@/config/axios'
+import { setAccessToken, setRefreshToken } from '@/utils/auth'
 
 defineOptions({ name: 'RuoyiVueProLogin' })
 
@@ -116,8 +117,8 @@ const handleLogin = async () => {
       url: '/system/auth/login',
       data: loginFormData
     })) as AuthLoginRespVO
-    localStorage.setItem('ACCESS_TOKEN', data.accessToken)
-    localStorage.setItem('REFRESH_TOKEN', data.refreshToken)
+    setAccessToken(data.accessToken)
+    setRefreshToken(data.refreshToken)
     message.success('登录成功')
   } catch {
     // 请求异常已由 axios 拦截器统一提示，此处捕获避免抛出未处理的 rejection
