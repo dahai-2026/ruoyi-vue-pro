@@ -4,10 +4,10 @@
 // 因此只影响登录页，不会污染全局 --el-color-primary 及其他页面的主题色。
 // ============================================
 
-// 红色主题三档颜色，与 styles/variables.scss 中的定义保持一致
-$login-primary-color: #e60012; // 主色
-$login-primary-hover: #ff4d4f; // hover：更亮
-$login-primary-active: #b3000e; // active：更深
+@use './variables.scss' as theme; // 三档色值统一取自 variables.scss（均带 !default，可覆盖）
+$login-primary-color: theme.$login-primary-color; // 主色
+$login-primary-hover: theme.$login-primary-hover; // hover：更亮
+$login-primary-active: theme.$login-primary-active; // active：更深
 
 .login-container {
   // ---------- Element Plus 主色及衍生色阶 ----------
