@@ -32,3 +32,39 @@ $login-text-sub-color: #5c4a00 !default;
   --login-text-color: #{$login-text-color};
   --login-text-sub-color: #{$login-text-sub-color};
 }
+
+// ---------- 登录页品牌黄 · 深色模式降级 ----------
+// 深色模式下继续使用 #FFD100 会在暗环境里产生眩光，因此对品牌黄做降饱和 +
+// 降亮度处理：保留黄系色相（H≈45°）但把饱和度压到 31%、亮度压到 23%，
+// 得到低饱和暗金 #4E4529；正文翻转为低饱和暖黄白，整体仍是「黄色主题」，
+// 不至于退化成中性黑。
+// 注意：--login-text-color 同时是品牌区正文色和按钮文字色，因此
+// --login-bg-color 与 --login-brand-color 的亮度必须继续保持接近，
+// 只改其中一个会让按钮内的文字对比度失守。
+
+// 深色模式品牌区背景色（低饱和暗金，H45 S31 L23，色相仍为黄系）
+$login-bg-color-dark: #4e4529 !default;
+
+// 深色模式品牌主色（暗金）：比背景略亮，保证按钮在深色表单面板上可辨识
+$login-brand-color-dark: #756222 !default;
+
+// 深色模式正文色（低饱和暖黄白）
+$login-text-color-dark: #f2ecd8 !default;
+
+// 深色模式次级文字色（低饱和暖黄白，比正文低一档）
+$login-text-sub-color-dark: #cfc08e !default;
+
+// 通过 html.dark 覆盖变量：Element Plus 深色模式会把 dark 类挂在 html 上，
+// 该选择器权重高于上面的 .login-container，因此无需 !important。
+// 对比度实测（WCAG AA 要求 ≥ 4.5:1，全部达标且留有余量）：
+//   正文 #F2ECD8 / 背景 #4E4529 ≈ 8.1:1
+//   次级 #CFC08E / 背景 #4E4529 ≈ 5.3:1
+//   按钮文字 #F2ECD8 / 品牌 #756222 ≈ 5.0:1
+// 按钮品牌色对深色表单面板（--el-bg-color #141414）约 3.1:1，
+// 保证主按钮在深色下仍能看出边界，不会与面板融为一体。
+html.dark .login-container {
+  --login-bg-color: #{$login-bg-color-dark};
+  --login-brand-color: #{$login-brand-color-dark};
+  --login-text-color: #{$login-text-color-dark};
+  --login-text-sub-color: #{$login-text-sub-color-dark};
+}
