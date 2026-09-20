@@ -2,6 +2,16 @@
 // 全局样式入口
 // ============================================
 
+// 共享变量必须先注册到构建入口：variables.scss 只定义变量、不产出任何 CSS，
+// 若没有文件显式 @use/@forward 它，它就会游离在编译图之外，其他文件无法把它
+// 当作全局共享变量使用。
+// @forward：把 variables.scss 的成员对外暴露为本入口的一部分，任何 @use 本入口
+// 的文件都能直接拿到 $login-primary-color / hover / active 三档色值。
+@forward './variables.scss';
+// @use ... as *：让本入口自身也能无命名空间直接引用这些共享变量，供后续追加的
+// 全局规则使用（Sass 模块不会自动全局可见，必须显式引入）。
+@use './variables.scss' as *;
+
 // 登录页红色主题必须在此显式引入：login-theme.scss 内的规则全部嵌套在
 // .login-container 下，若没有任何文件 @use/@import 它，整个文件会被
 // 样式编译器丢弃，登录页主题覆盖不会编译进最终产物。
