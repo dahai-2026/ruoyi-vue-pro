@@ -1,0 +1,34 @@
+// ============================================
+// 全局 SCSS 变量
+// ============================================
+
+// ---------- 登录页品牌黄主题 ----------
+// 登录页左侧插画 / 品牌区的背景色统一由本文件提供：组件内只允许通过
+// var(--login-bg-color) 取值，禁止在业务样式里散落硬编码色值，避免后续
+// 换肤时出现漏改。
+// 色值一律使用标准 HEX：oklch() / lab() 等新语法在旧版浏览器中会让整条
+// 声明解析失败、背景色直接丢失，因此不使用。
+// 各变量均带 !default，便于外部在引入前按需覆盖。
+
+// 品牌区背景色（品牌黄）
+$login-bg-color: #ffd100 !default;
+
+// 品牌主色（品牌黄），用于登录按钮等强调元素的填充
+$login-brand-color: #ffd100 !default;
+
+// 黄底正文色：#1F1F1F 与 #FFD100 的对比度约为 11.3:1，满足 WCAG AA（≥ 4.5:1）
+$login-text-color: #1f1f1f !default;
+
+// 黄底次级文字色：#5C4A00 与 #FFD100 的对比度约为 5.9:1，同样满足 WCAG AA
+$login-text-sub-color: #5c4a00 !default;
+
+// ---------- 主题变量对外暴露 ----------
+// CSS 自定义属性统一挂在登录页根节点 .login-container 下：自定义属性会沿 DOM
+// 继承，登录页内任意层级都能读取；作用域限定在登录页，不写顶层 :root，
+// 避免污染其他页面的全局主题。
+.login-container {
+  --login-bg-color: #{$login-bg-color};
+  --login-brand-color: #{$login-brand-color};
+  --login-text-color: #{$login-text-color};
+  --login-text-sub-color: #{$login-text-sub-color};
+}
